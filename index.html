@@ -947,7 +947,35 @@
                 event.currentTarget.classList.add('active');
             }
         }
+function openLightbox(card) {
+    // If this card is a DPS (multi-page) gallery, delegate to openDPSGallery
+    if (card && (card.hasAttribute && card.hasAttribute('data-dps-gallery') || card.classList && card.classList.contains('dps'))) {
+        openDPSGallery(card);
+        return;
+    }
 
+    const img = card.querySelector('img');
+    const titleEl = card.querySelector('h3');
+    const descEl = card.querySelector('p');
+    if (!img) return;
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const caption = document.getElementById('lightbox-caption');
+    const counter = document.getElementById('gallery-counter');
+
+    // Ensure non-gallery mode for single images
+    lightbox.classList.remove('gallery-mode');
+    lightbox.classList.add('active');
+
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || 'Enlarged Portfolio Item';
+
+    const title = titleEl ? titleEl.innerText.trim() : '';
+    const desc = descEl ? descEl.innerText.trim() : '';
+    caption.innerText = desc ? `${title} - ${desc}` : title;
+    counter.innerText = '';
+}
         /* ============================================================
            EXTERNAL DPS PAGE GALLERY
            ============================================================
